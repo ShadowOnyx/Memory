@@ -1,15 +1,20 @@
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.io.*;
 public class MemoryGameMain
 	{	
 		static int row;
 		static int col;
+		static int rowS;
+		static int colS;
 		static int randomRow;
 		static int randomCol;
 		static int choice;
 		static int counter;
+		static int gameCounter;
 		static String array [][] = new String [4][4];
 		static String arrayHidden [][] = new String [4][4];
+		static String tempArray [] = new String [4];
 		static ArrayList <String> arrayFile = new ArrayList<String>();
 		public static void main(String[] args) throws IOException
 			{
@@ -18,9 +23,26 @@ public class MemoryGameMain
 			fillArrayList();
 			fillArraySpaces();
 			fillArray();
-	
+			makeGrid();
+			while(gameCounter!=8)
+				{
+				playGame();
+				try
+					{
+					TimeUnit.SECONDS.sleep(1);
+					} catch (InterruptedException e)
+					{
+					e.printStackTrace();
+					}
+				printSpaces();
+				}
 			
 			
+			}
+		public static void printSpaces()
+			{
+			for(int i=0;i<75;i++)
+			System.out.println("");	
 			}
 		public static void fillArrayList() throws IOException
 			{
@@ -49,11 +71,6 @@ public class MemoryGameMain
 					}
 				}
 			}
-		public static void generateNumbers()
-			{
-			randomRow = (int)(Math.random()*4);
-			randomCol = (int)(Math.random()*4);
-			}
 		public static void fillArraySpaces()
 			{
 			for(int i=0;i<4;i++)
@@ -76,63 +93,46 @@ public class MemoryGameMain
 			if(choice==1)
 				{
 				Scanner pls1 = new Scanner(new File("animals.txt"));
-				while(pls1.hasNext())
+				Collections.shuffle(arrayFile);
+				for(int i=0;i<4;i++)
 					{
-					generateNumbers();
-					if(array[randomRow][randomCol]=="    ")
+					for(int y=0;y<4;y++)
 						{
-						array [randomRow][randomCol] = arrayFile.get(counter);
-						arrayFile.remove(counter);
+						array[i][y] = arrayFile.get(counter);
 						counter++;
-						}
-					else
-						{
-						generateNumbers();
-						fillArray();
 						}
 					}
 				}
 			if(choice==2)
 				{
 				Scanner pls2 = new Scanner(new File("bodies.txt"));
-				while(pls2.hasNext())
+				Collections.shuffle(arrayFile);
+				for(int i=0;i<4;i++)
 					{
-					generateNumbers();
-					if(array[randomRow][randomCol]=="    ")
+					for(int y=0;y<4;y++)
 						{
-						array [randomRow][randomCol] = arrayFile.get(counter);
-						arrayFile.remove(counter);
+						array[i][y] = arrayFile.get(counter);
 						counter++;
-						}
-					else
-						{
-						generateNumbers();
-						fillArray();
 						}
 					}
 				}
 			if(choice==3)
 				{
 				Scanner pls3 = new Scanner(new File("dedamimal.txt"));
-				while(pls3.hasNext())
+				Collections.shuffle(arrayFile);
+				for(int i=0;i<4;i++)
 					{
-					generateNumbers();
-					if(array[randomRow][randomCol]=="    ")	
+					for(int y=0;y<4;y++)
 						{
-						array [randomRow][randomCol] = arrayFile.get(counter);
-						arrayFile.remove(counter);
+						array[i][y] = arrayFile.get(counter);
 						counter++;
 						}
-					else
-						{
-						generateNumbers();
-						fillArray();
-						}
-					}	
+					}
 				}
 			}
 		public static void makeGrid()
 			{
+				
 			System.out.println("      A         B         C         D");
 			System.out.println("-----------------------------------------");	
 			System.out.println(" |        ||        ||        ||        |");
@@ -151,30 +151,34 @@ public class MemoryGameMain
 			System.out.println("4|  "+arrayHidden[3][0]+"  ||  "+arrayHidden[3][1]+"  ||  "+arrayHidden[3][2]+"  ||  "+arrayHidden[3][3]+"  |");
 			System.out.println(" |        ||        ||        ||        |");
 			System.out.println("-----------------------------------------");
-			//System.out.println("      A         B         C         D");
-			//System.out.println("-----------------------------------------");	
-			//System.out.println(" |        ||        ||        ||        |");
-			//System.out.println("1|        ||        ||        ||        |");
-			//System.out.println(" |        ||        ||        ||        |");
-			//System.out.println("-----------------------------------------");
-			//System.out.println(" |        ||        ||        ||        |");
-			//System.out.println("2|        ||        ||        ||        |");
-			//System.out.println(" |        ||        ||        ||        |");
-			//System.out.println("-----------------------------------------");
-			//System.out.println(" |        ||        ||        ||        |");
-			//System.out.println("3|        ||        ||        ||        |");
-			//System.out.println(" |        ||        ||        ||        |");
-			//System.out.println("-----------------------------------------");
-			//System.out.println(" |        ||        ||        ||        |");
-			//System.out.println("4|        ||        ||        ||        |");
-			//System.out.println(" |        ||        ||        ||        |");
-			//System.out.println("-----------------------------------------");
+			
+			}
+		public static void playGame()
+			{
+			determineCoor();
+			arrayHidden[row][col] = array [row][col];
+			tempArray[0] = arrayHidden[row][col];
+			makeGrid();
+			determineCoorSecond();
+			arrayHidden[rowS][colS] = array [rowS][colS];
+			makeGrid();
+			tempArray[1] = arrayHidden[rowS][colS];
+			if(tempArray[0]==tempArray[1])
+				{
+				gameCounter++;
+				}
+			if(tempArray[0]!=tempArray[1])
+				{
+				arrayHidden[row][col] = "    ";
+				arrayHidden[rowS][colS] = "    ";
+				}
 			}
 		public static void determineCoor()
 			{
+			System.out.println("Enter in coordinates");
 			Scanner pls = new Scanner(System.in);
 			String input = pls.nextLine();
-			int row = Integer.parseInt(input.substring(1))-1;
+			row = Integer.parseInt(input.substring(1))-1;
 			switch(input.substring(0,1))
 				{
 				case "A":
@@ -203,4 +207,41 @@ public class MemoryGameMain
 					}
 				}
 			}
+		public static void determineCoorSecond()
+			{
+			System.out.println("Enter in coordinates");
+			Scanner pls = new Scanner(System.in);
+			String input = pls.nextLine();
+			rowS = Integer.parseInt(input.substring(1))-1;
+			switch(input.substring(0,1))
+				{
+				case "A":
+				case "a":
+					{
+					colS = 0;	
+					break;	
+					}
+				case "B":
+				case "b":
+					{
+					colS = 1;
+					break;		
+					}
+				case "C":
+				case "c":
+					{
+					colS = 2;	
+					break;
+					}
+				case "D":
+				case "d":
+					{
+					colS = 3;	
+					break;	
+					}
+				}
+			}
+		
+	
+	
 	}
