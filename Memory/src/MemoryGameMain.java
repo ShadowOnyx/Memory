@@ -12,8 +12,8 @@ public class MemoryGameMain
 		static int choice;
 		static int counter;
 		static int gameCounter;
-		static String array [][] = new String [4][4];
 		static String arrayHidden [][] = new String [4][4];
+		static String arrayDisplay [][] = new String [4][4];
 		static String tempArray [] = new String [4];
 		static ArrayList <String> arrayFile = new ArrayList<String>();
 		public static void main(String[] args) throws IOException
@@ -24,7 +24,7 @@ public class MemoryGameMain
 			fillArraySpaces();
 			fillArray();
 			makeGrid();
-			while(gameCounter!=8)
+			while(gameCounter<9)
 				{
 				playGame();
 				try
@@ -77,8 +77,8 @@ public class MemoryGameMain
 				{
 				for(int y=0;y<4;y++)
 					{
-					array[i][y] = "    ";
 					arrayHidden[i][y] = "    ";
+					arrayDisplay[i][y] = "    ";
 					}
 				}
 			}
@@ -98,7 +98,7 @@ public class MemoryGameMain
 					{
 					for(int y=0;y<4;y++)
 						{
-						array[i][y] = arrayFile.get(counter);
+						arrayHidden[i][y] = arrayFile.get(counter);
 						counter++;
 						}
 					}
@@ -111,7 +111,7 @@ public class MemoryGameMain
 					{
 					for(int y=0;y<4;y++)
 						{
-						array[i][y] = arrayFile.get(counter);
+						arrayHidden[i][y] = arrayFile.get(counter);
 						counter++;
 						}
 					}
@@ -124,7 +124,7 @@ public class MemoryGameMain
 					{
 					for(int y=0;y<4;y++)
 						{
-						array[i][y] = arrayFile.get(counter);
+						arrayHidden[i][y] = arrayFile.get(counter);
 						counter++;
 						}
 					}
@@ -133,22 +133,22 @@ public class MemoryGameMain
 		public static void makeGrid()
 			{
 				
-			System.out.println("      A         B         C         D");
+			System.out.println("      1         2         3         4");
 			System.out.println("-----------------------------------------");	
 			System.out.println(" |        ||        ||        ||        |");
-			System.out.println("1|  "+arrayHidden[0][0]+"  ||  "+arrayHidden[0][1]+"  ||  "+arrayHidden[0][2]+"  ||  "+arrayHidden[0][3]+"  |");
+			System.out.println("A|  "+arrayDisplay[0][0]+"  ||  "+arrayDisplay[0][1]+"  ||  "+arrayDisplay[0][2]+"  ||  "+arrayDisplay[0][3]+"  |");
 			System.out.println(" |        ||        ||        ||        |");
 			System.out.println("-----------------------------------------");
 			System.out.println(" |        ||        ||        ||        |");
-			System.out.println("2|  "+arrayHidden[1][0]+"  ||  "+arrayHidden[1][1]+"  ||  "+arrayHidden[1][2]+"  ||  "+arrayHidden[1][3]+"  |");
+			System.out.println("B|  "+arrayDisplay[1][0]+"  ||  "+arrayDisplay[1][1]+"  ||  "+arrayDisplay[1][2]+"  ||  "+arrayDisplay[1][3]+"  |");
 			System.out.println(" |        ||        ||        ||        |");
 			System.out.println("-----------------------------------------");
 			System.out.println(" |        ||        ||        ||        |");
-			System.out.println("3|  "+arrayHidden[2][0]+"  ||  "+arrayHidden[2][1]+"  ||  "+arrayHidden[2][2]+"  ||  "+arrayHidden[2][3]+"  |");
+			System.out.println("C|  "+arrayDisplay[2][0]+"  ||  "+arrayDisplay[2][1]+"  ||  "+arrayDisplay[2][2]+"  ||  "+arrayDisplay[2][3]+"  |");
 			System.out.println(" |        ||        ||        ||        |");
 			System.out.println("-----------------------------------------");
 			System.out.println(" |        ||        ||        ||        |");
-			System.out.println("4|  "+arrayHidden[3][0]+"  ||  "+arrayHidden[3][1]+"  ||  "+arrayHidden[3][2]+"  ||  "+arrayHidden[3][3]+"  |");
+			System.out.println("D|  "+arrayDisplay[3][0]+"  ||  "+arrayDisplay[3][1]+"  ||  "+arrayDisplay[3][2]+"  ||  "+arrayDisplay[3][3]+"  |");
 			System.out.println(" |        ||        ||        ||        |");
 			System.out.println("-----------------------------------------");
 			
@@ -156,21 +156,21 @@ public class MemoryGameMain
 		public static void playGame()
 			{
 			determineCoor();
-			arrayHidden[row][col] = array [row][col];
-			tempArray[0] = arrayHidden[row][col];
+			arrayDisplay[row][col] = arrayHidden [row][col];
+			tempArray[0] = arrayDisplay[row][col];
 			makeGrid();
 			determineCoorSecond();
-			arrayHidden[rowS][colS] = array [rowS][colS];
+			arrayDisplay[rowS][colS] = arrayHidden [rowS][colS];
 			makeGrid();
-			tempArray[1] = arrayHidden[rowS][colS];
-			if(tempArray[0]==tempArray[1])
+			tempArray[1] = arrayDisplay[rowS][colS];
+			if(tempArray[0].equals(tempArray[1]))
 				{
 				gameCounter++;
 				}
-			if(tempArray[0]!=tempArray[1])
+			else
 				{
-				arrayHidden[row][col] = "    ";
-				arrayHidden[rowS][colS] = "    ";
+				arrayDisplay[row][col] = "    ";
+				arrayDisplay[rowS][colS] = "    ";
 				}
 			}
 		public static void determineCoor()
@@ -178,31 +178,31 @@ public class MemoryGameMain
 			System.out.println("Enter in coordinates");
 			Scanner pls = new Scanner(System.in);
 			String input = pls.nextLine();
-			row = Integer.parseInt(input.substring(1))-1;
+			col = Integer.parseInt(input.substring(1))-1;
 			switch(input.substring(0,1))
 				{
 				case "A":
 				case "a":
 					{
-					col = 0;	
+					row = 0;	
 					break;	
 					}
 				case "B":
 				case "b":
 					{
-					col = 1;
+					row = 1;
 					break;		
 					}
 				case "C":
 				case "c":
 					{
-					col = 2;	
+					row = 2;	
 					break;
 					}
 				case "D":
 				case "d":
 					{
-					col = 3;	
+					row = 3;	
 					break;	
 					}
 				}
@@ -212,31 +212,31 @@ public class MemoryGameMain
 			System.out.println("Enter in coordinates");
 			Scanner pls = new Scanner(System.in);
 			String input = pls.nextLine();
-			rowS = Integer.parseInt(input.substring(1))-1;
+			colS = Integer.parseInt(input.substring(1))-1;
 			switch(input.substring(0,1))
 				{
 				case "A":
 				case "a":
 					{
-					colS = 0;	
+					rowS = 0;	
 					break;	
 					}
 				case "B":
 				case "b":
 					{
-					colS = 1;
+					rowS  = 1;
 					break;		
 					}
 				case "C":
 				case "c":
 					{
-					colS = 2;	
+					rowS = 2;	
 					break;
 					}
 				case "D":
 				case "d":
 					{
-					colS = 3;	
+					rowS = 3;	
 					break;	
 					}
 				}
