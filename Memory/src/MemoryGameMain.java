@@ -26,6 +26,7 @@ public class MemoryGameMain
 			makeGrid();
 			while(gameCounter<9)
 				{
+					
 				playGame();
 				try
 					{
@@ -35,6 +36,7 @@ public class MemoryGameMain
 					e.printStackTrace();
 					}
 				printSpaces();
+				makeGrid();
 				}
 			
 			
